@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Post Articles</title>
+    <link href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="antialised">
+    <!-- Nav Bar -->
+    <nav class="flex justify-between text-white p-4 bg-blue-600">
+        <div>
+            <a href="{% url 'index' %}"><h1 class="text-2xl">Blog App</h1></a>
+        </div>
+        <div>
+            <a href="" class="text-white">Welcome {{ user.username }} |</a>
+            <a href="{% url 'post-articles' %}" class="text-white">Post Articles |</a>
+            <a href="{% url 'add-category' %}" class="text-white">Add a Category |</a>
+            <a href="{% url 'all-articles' %}" class="text-white">All Articles |</a>
+            <a href="{% url 'all-categories' %}" class="text-white">All Categories |</a>
+            <a href="{% url 'logout' %}" class="text-white">Logout</a>
+        </div>
+    </nav>
+
+    <!-- Body -->
+     <div class="container mx-auto p-4 mt-4 space-y-4">
+        <div class="flex flex-wrap flex-col space-y-5">
+            <h2 class="text-3xl font-sans font-medium">Post Articles</h2>
+            <form action="" method="POST" class="space-y-4">
+                {% csrf_token %}
+
+                <div class="space-x-4">
+                    <label for="title" class="text-xl font-sans font-medium">Title:</label>
+                    <input type="text" name="title" id="title" placeholder="Enter a title..." class="py-1 px-1 shadow-lg ring focus:outline-none focus:ring focus:ring-blue-600 rounded-sm w-72">
+                </div>
+                <div class="space-x-4">
+                    <label for="author" class="text-xl font-sans font-medium">Author:</label>
+                    <input type="text" id="author" name="author" placeholder="Enter an author..." class="py-1 px-1 shadow-lg ring focus:outline-none focus:ring focus:ring-blue-600 rounded-sm w-72">
+                </div>
+                <div class="flex space-x-4">
+                    <label for="content" class="text-xl font-sans font-medium">Content:</label>
+                    <textarea name="content" id="content" placeholder="Enter your content..." class="w-3/5 h-72 py-1 px-1 shadow-lg ring focus:outline-none focus:ring focus:ring-blue-600 rounded-sm"></textarea>
+                </div>
+                <div>
+                    <label for="category" class="text-xl font-sans font-medium">Category:</label>
+                    <select name="category_id">
+                        {% for category in categories %}
+                        <option value="{{ category.id}}">{{ category.category_name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <button id="submit" name="submit" class="bg-blue-600 px-10 py-3 text-white hover:bg-blue-700 hover:shadow-2xl">Submit</button>
+            </form>
+        </div>
+     </div>
+</body>
+</html>

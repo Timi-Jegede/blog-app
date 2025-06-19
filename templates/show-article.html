@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Show Article</title>
+    <link href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="flex flex-col min-h-screen antialised">
+       <!-- Nav Bar -->
+    <nav class="flex justify-between text-white p-4 bg-blue-600">
+        <div>
+            <a href="{% url 'index' %}"><h1 class="text-2xl">Blog App</h1></a>
+        </div>
+        <div>
+            <a href="" class="text-white">Welcome {{ user.username }} |</a>
+            <a href="{% url 'post-articles' %}" class="text-white">Post Articles |</a>
+            <a href="{% url 'add-category' %}" class="text-white">Add a Category |</a>
+            <a href="{% url 'all-articles' %}" class="text-white">All Articles |</a>
+            <a href="{% url 'all-categories' %}" class="text-white">All Categories |</a>
+            <a href="{% url 'logout' %}" class="text-white">Logout</a>
+        </div>
+    </nav>
+
+    <!-- Body Section -->
+    <div class="flex flex-row place-content-between">
+
+        <!-- Main Content -->
+        <div class="flex flex-col place-content-between">
+
+            <!-- Blog Article Section-->
+            <div class="mx-auto">
+                {% if show_article %}
+                    <div>
+                        <h1 class="p-4 text-2xl font-medium">{{ show_article.blog_title }}</h1>
+                    </div>
+                    <div>
+                        <p class="p-4">{{ show_article.blog_content }}</p>
+                    </div>
+                    <div>
+                        <p class="p-4">{{ show_article.created_at }}</p>
+                    </div>
+                {% else %}
+                <div>
+                    <p class="p-4">No blog posts available.</p>
+                </div>
+                {% endif %}
+            </div>
+            <hr class="border-1 border-solid border-gray-400">
+
+       <!-- Comment Section -->
+             <div class="flex flex-col p-4">
+                <div>
+                    <h2 class="text-2xl font-medium">Comments</h2>
+                </div>
+                {% for comment in comments %}
+                    <div class="space-y-4 p-4 border border-gray-200 rounded-md">
+                        <p class="text-black">{{ comment.comment }}</p>
+                        <p class="text-black">{{ comment.email }}</p>
+                    </div>
+                {% endfor %}
+                {% if not comments %}
+                    <div class="space-y-4">
+                        <p class="text-black">No comments available.</p>
+                        <p class="text-black">Be the first to comment!</p>
+                    </div>
+                {% endif %}
+
+                <!-- Add New Comment Section -->
+                <div class="flex space-x-4 my-4">
+                    {% if user.is_authenticated %}
+                        <form action="{% url 'post-comments' %}" method="POST" class="flex flex-col">
+                            {% csrf_token %}
+                            {% if error_message %}
+                                <div class="text-red-600">
+                                    <p>{{ error_message }}</p>
+                                </div>
+                            {% endif %}
+                            <fieldset class="border p-4 space-y-4">
+                                <legend class="text-lg font-bold text-blue-600 px-2">Comment</legend>
+                                <input type="hidden" name="blog_post_id" value="{{ show_article.id }}">
+                                <div>
+                                    <textarea name="comment" id="comment" placeholder="Drop a Comment..." class="w-72 h-12 p-2 border border-blue-400 rounded-l-md"></textarea>
+                                </div>
+                                <div>
+                                    <input type="email" name="email" id="email" placeholder="Enter your email..." class="w-72 p-2 border border-blue-400 rounded-md">                            
+                                </div>
+                                <button class="px-2 py-2 bg-blue-600 text-white rounded-r-md hover:bg-blue-700 transition-colors">Comment</button>
+                            </fieldset>
+                        </form>
+                    {% else %}
+                        <p class="text-red-600">You need to be logged in to comment.</p>
+                    {% endif %}
+                </div>
+             </div>
+        </div>
+
+        <!-- The Aside Section -->
+         <aside class="flex flex-col border-l-2 border-gray-200">
+
+            <!-- Latest Articles -->
+            <div class="flex flex-col space-y-4 my-4 mx-2">
+                <h1 class="text-2xl">Latest Articles</h1>
+
+                {% for article in latest_articles %}
+                    <a href="{% url 'show-article' article.id %}">
+                        <div class="w-44">
+                            <p>{{ article.blog_title }}</p>
+                        </div>
+                    </a>
+                {% endfor %}
+                {% if not latest_articles %}
+                    <div class="w-44">
+                        <p>No latest articles available.</p>
+                    </div>
+                {% endif %}
+            </div>
+            <hr class="border-1 border-solid border-gray-400">
+
+            <!-- Categories -->
+             <div class="flex flex-col space-y-4 my-4 mx-2">
+                <h1 class="text-2xl font-medium">Categories</h1>
+                {% for category in categories %}
+                <div class="w-44">
+                    <a href="{% url 'show-categories' %}"><p>{{ category.category_name }}</p></a>
+                </div>
+                {% endfor %}
+                {% if not categories %}
+                <div class="w-44">
+                    <p>No categories available</p>
+                </div>
+                {% endif %}
+             </div>
+         </aside>
+    </div>
+
+    <footer>
+        <a href="#">Powered by Code with Timi</a>
+    </footer>
+</body>
+</html>

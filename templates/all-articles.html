@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>All Articles</title>
+    <link href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="antialiased">
+       <!-- Nav Bar -->
+    <nav class="flex justify-between text-white p-4 bg-blue-600">
+        <div>
+            <a href="{% url 'index' %}"><h1 class="text-2xl">Blog App</h1></a>
+        </div>
+        <div>
+            <a href="" class="text-white">Welcome {{ user.username }} |</a>
+            <a href="{% url 'post-articles' %}" class="text-white">Post Articles |</a>
+            <a href="{% url 'add-category' %}" class="text-white">Add a Category |</a>
+            <a href="{% url 'all-articles' %}" class="text-white">All Articles |</a>
+            <a href="{% url 'all-categories' %}" class="text-white">All Categories |</a>
+            <a href="{% url 'logout' %}" class="text-white">Logout</a>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+     <div class="flex items-start justify-start h-screen">
+        <div class="bg-white p-8 shadow-md rounded-lg max-w-md w-full">
+            <h2 class="text-2xl font-medium mb-4">Articles</h2>
+            <ul class="space-y-2">
+                {% for article in articles %}
+                <li class="p-4 border border-gray-200 rounded-md space-y-4">
+                    <div class="flex space-x-4 items-start">
+                        <p class="font-semibold">{{ article.blog_title }}</p>
+                        <p class="text-gray-600">{{ article.category.category_name }}</p>
+                        <button onclick="window.location.href='{% url 'show-article' article.id %}'" class="bg-blue-400 px-3 hover:bg-blue-500 shadow transition">View</button>
+                        <button onclick="window.location.href='{% url 'delete-article' article.id %}'" class="bg-red-400 px-3 hover:bg-red-500 shadow transition">Delete</button>  
+                    </div>   
+                    <hr class="my-6 border-t-2 border-gray-500 w-full mx-auto rounded">
+                </li>
+                {% empty %}
+                <li>
+                    <p class="font-semibold">{{ error_message }}</p>
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
+     </div>
+</body>
+</html>

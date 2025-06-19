@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Show Categories</title>
+    <link href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="antialised">
+    <!-- Nav Bar -->
+    <nav class="flex justify-between text-white p-4 bg-blue-600">
+        <div>
+            <a href="{% url 'index' %}"><h1 class="text-2xl">Blog App</h1></a>
+        </div>
+        <div>
+            <a href="" class="text-white">Welcome {{ user.username }} |</a>
+            <a href="{% url 'post-articles' %}" class="text-white">Post Articles |</a>
+            <a href="{% url 'add-category' %}" class="text-white">Add a Category |</a>
+            <a href="{% url 'all-articles' %}" class="text-white">All Articles |</a>
+            <a href="{% url 'all-categories' %}" class="text-white">All Categories |</a>
+            <a href="{% url 'logout' %}" class="text-white">Logout</a>
+        </div>
+    </nav>
+
+
+    <!-- Main Content -->
+    <div class="flex items-start justify-start h-screen">
+        <div class="bg-white p-8 shadow-md rounded-lg max-w-md w-full">
+            <h1 class="text-2xl font-medium mb-4">Categories</h1>
+            <ul class="space-y-2">
+                {% for category in categories %}
+                    <li class="p-4 border border-gray-200 rounded-md">
+                        <h2 class="text-xl font-semibold">{{ category.category_name }}</h2>
+                        {% for post in category.posts.all %}
+                            <a href="{% url 'show-article' post.id %}"><p class="text-gray-600">Articles: {{ post.blog_title }}</p></a>
+                        {% empty %}
+                            <p class="text-gray-600">No articles in this category</p>
+                        {% endfor %}
+                    </li>
+                  {% endfor %}
+            </ul>
+        </div>
+    </div>
+</body>
+</html>
